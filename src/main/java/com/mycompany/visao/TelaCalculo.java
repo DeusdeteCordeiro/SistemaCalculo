@@ -15,6 +15,7 @@ public class TelaCalculo extends javax.swing.JFrame {
      */
     public TelaCalculo() {
         initComponents();
+        
     }
 
     /**
