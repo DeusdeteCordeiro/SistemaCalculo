@@ -58,8 +58,6 @@ public class TelaCalculo extends javax.swing.JFrame {
 
         jLabel2.setText("CPF/CNPJ");
 
-        tfCpfCnpj.setText("00.384.459/0001-00");
-
         jLabel3.setText("NOME");
 
         jLabel4.setText("TELEFONE");
