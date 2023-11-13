@@ -4,6 +4,10 @@
  */
 package com.mycompany.visao;
 
+import com.mycompany.dao.DaoCalculo;
+import com.mycompany.ferramentas.BancoDeDadosMySql;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author deusdete.2904
@@ -16,6 +20,7 @@ public class TelaCalculo extends javax.swing.JFrame {
     public TelaCalculo() {
         initComponents();
         
+        BancoDeDadosMySql.conectar();
     }
 
     /**
@@ -44,14 +49,16 @@ public class TelaCalculo extends javax.swing.JFrame {
         jcbSalvar = new javax.swing.JButton();
         jcbSair = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableValores = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableIndexador = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jcbAlterar = new javax.swing.JButton();
+        addIndexador = new javax.swing.JButton();
+        addValores = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,39 +94,47 @@ public class TelaCalculo extends javax.swing.JFrame {
 
         jcbSair.setText("SAIR");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tableValores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "DATA", "HISTÓRICO", "VALOR", "D/C"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tableValores);
 
         jLabel8.setText("VALORES A CALCULAR");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableIndexador.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "DATA/PERÍODO", "INDEXADOR ", "TAXA DE JUROS"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableIndexador);
 
         jTextField1.setText("idCliente");
 
         jLabel9.setText("INDEXADORES DE CÁLCULO");
 
         jcbAlterar.setText("Alterar");
+
+        addIndexador.setText("+");
+        addIndexador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addIndexadorActionPerformed(evt);
+            }
+        });
+
+        addValores.setText("+");
+        addValores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addValoresActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -150,6 +165,10 @@ public class TelaCalculo extends javax.swing.JFrame {
                     .addComponent(tfAnotacoes)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addIndexador, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,15 +181,17 @@ public class TelaCalculo extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel8)
                             .addComponent(jLabel1)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                     .addGap(164, 164, 164)
                                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(tfId, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 6, Short.MAX_VALUE)))
+                        .addGap(0, 6, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(addValores, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -205,16 +226,22 @@ public class TelaCalculo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel9))
+                            .addComponent(addIndexador))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8))
+                    .addComponent(addValores))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcbSalvar)
                     .addComponent(jcbSair)
@@ -231,8 +258,56 @@ public class TelaCalculo extends javax.swing.JFrame {
     }//GEN-LAST:event_tfCpfCnpjActionPerformed
 
     private void jcbCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCalcularActionPerformed
-        // TODO add your handling code here:
+        try{
+            DaoCalculo daoCalculo = new DaoCalculo();
+            
+            DefaultTableModel defaultTableModel = (DefaultTableModel) tableValores.getModel();
+            
+            int qtdeLinhas = defaultTableModel.getRowCount();
+            
+            Double saldo = 0.0;
+           
+            String debCred = "";
+            for(int i = 0; i < qtdeLinhas; i++){
+                debCred = String.valueOf(defaultTableModel.getValueAt(i, 3));
+                
+                System.out.println(debCred);
+                
+                daoCalculo.inserir(i + 1, 
+                Integer.parseInt(tfId.getText()), 
+                1, 
+                1, 
+                String.valueOf(defaultTableModel.getValueAt(i, 0)), //Data 
+                String.valueOf(defaultTableModel.getValueAt(i, 1)), //Histórico
+                Double.valueOf(String.valueOf(defaultTableModel.getValueAt(i, 2))), //Débito 
+//                Double.valueOf(String.valueOf(defaultTableModel.getValueAt(i, 7))), //Crédito;
+//                Double.valueOf(String.valueOf(defaultTableModel.getValueAt(i, 8))), //saldo
+//                Double.valueOf(String.valueOf(defaultTableModel.getValueAt(i, 9))), //Taxa de juro
+//                Integer.parseInt(String.valueOf(defaultTableModel.getValueAt(i, 10))), //Dias 
+//                Double.valueOf(String.valueOf(defaultTableModel.getValueAt(i, 11)))); //Valor do juro
+                0.0,
+                0.0,
+                0.0,
+                0,
+                0.0,
+                debCred);
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_jcbCalcularActionPerformed
+
+    private void addIndexadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addIndexadorActionPerformed
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tableIndexador.getModel();
+        
+        defaultTableModel.addRow(new Object[]{"", "", ""});
+    }//GEN-LAST:event_addIndexadorActionPerformed
+
+    private void addValoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addValoresActionPerformed
+        DefaultTableModel defaultTableModel = (DefaultTableModel) tableValores.getModel();
+        
+        defaultTableModel.addRow(new Object[]{"", "", ""});
+    }//GEN-LAST:event_addValoresActionPerformed
 
     /**
      * @param args the command line arguments
@@ -270,6 +345,8 @@ public class TelaCalculo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addIndexador;
+    private javax.swing.JButton addValores;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -281,14 +358,14 @@ public class TelaCalculo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JButton jcbAlterar;
     private javax.swing.JButton jcbCalcular;
     private javax.swing.JButton jcbSair;
     private javax.swing.JButton jcbSalvar;
+    private javax.swing.JTable tableIndexador;
+    private javax.swing.JTable tableValores;
     private javax.swing.JTextField tfAnotacoes;
     private javax.swing.JTextField tfCpfCnpj;
     private javax.swing.JTextField tfId;
