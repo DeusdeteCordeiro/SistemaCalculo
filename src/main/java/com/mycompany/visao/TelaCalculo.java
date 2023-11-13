@@ -4,6 +4,8 @@
  */
 package com.mycompany.visao;
 
+import com.mycompany.ferramentas.BancoDeDadosMySql;
+
 /**
  *
  * @author deusdete.2904
@@ -16,6 +18,7 @@ public class TelaCalculo extends javax.swing.JFrame {
     public TelaCalculo() {
         initComponents();
         
+        BancoDeDadosMySql.conectar();
     }
 
     /**
@@ -44,10 +47,10 @@ public class TelaCalculo extends javax.swing.JFrame {
         jcbSalvar = new javax.swing.JButton();
         jcbSair = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tableCalculo = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableIndexadores = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
@@ -87,7 +90,7 @@ public class TelaCalculo extends javax.swing.JFrame {
 
         jcbSair.setText("SAIR");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tableCalculo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -98,11 +101,11 @@ public class TelaCalculo extends javax.swing.JFrame {
                 "DATA", "HISTÓRICO", "VALOR", "D/C"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tableCalculo);
 
         jLabel8.setText("VALORES A CALCULAR");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableIndexadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -113,7 +116,7 @@ public class TelaCalculo extends javax.swing.JFrame {
                 "DATA/PERÍODO", "INDEXADOR ", "TAXA DE JUROS"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableIndexadores);
 
         jTextField1.setText("idCliente");
 
@@ -281,14 +284,14 @@ public class TelaCalculo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JButton jcbAlterar;
     private javax.swing.JButton jcbCalcular;
     private javax.swing.JButton jcbSair;
     private javax.swing.JButton jcbSalvar;
+    private javax.swing.JTable tableCalculo;
+    private javax.swing.JTable tableIndexadores;
     private javax.swing.JTextField tfAnotacoes;
     private javax.swing.JTextField tfCpfCnpj;
     private javax.swing.JTextField tfId;
