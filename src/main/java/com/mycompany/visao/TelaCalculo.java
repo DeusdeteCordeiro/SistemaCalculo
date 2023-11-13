@@ -51,6 +51,7 @@ public class TelaCalculo extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jcbAlterar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,6 +60,11 @@ public class TelaCalculo extends javax.swing.JFrame {
         jLabel2.setText("CPF/CNPJ");
 
         tfCpfCnpj.setText("00.384.459/0001-00");
+        tfCpfCnpj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfCpfCnpjActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("NOME");
 
@@ -71,6 +77,11 @@ public class TelaCalculo extends javax.swing.JFrame {
         jLabel7.setText("DATA BASE JUROS");
 
         jcbCalcular.setText("CALCULAR");
+        jcbCalcular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbCalcularActionPerformed(evt);
+            }
+        });
 
         jcbSalvar.setText("SALVAR");
 
@@ -99,7 +110,7 @@ public class TelaCalculo extends javax.swing.JFrame {
                 {null, null, null}
             },
             new String [] {
-                "DATA", "INDEXADOR ", "TAXA DE JUROS"
+                "DATA/PERÍODO", "INDEXADOR ", "TAXA DE JUROS"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -107,6 +118,8 @@ public class TelaCalculo extends javax.swing.JFrame {
         jTextField1.setText("idCliente");
 
         jLabel9.setText("INDEXADORES DE CÁLCULO");
+
+        jcbAlterar.setText("Alterar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,6 +130,8 @@ public class TelaCalculo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jcbCalcular)
+                        .addGap(112, 112, 112)
+                        .addComponent(jcbAlterar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jcbSalvar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -203,12 +218,21 @@ public class TelaCalculo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcbSalvar)
                     .addComponent(jcbSair)
-                    .addComponent(jcbCalcular))
+                    .addComponent(jcbCalcular)
+                    .addComponent(jcbAlterar))
                 .addGap(6, 6, 6))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tfCpfCnpjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCpfCnpjActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfCpfCnpjActionPerformed
+
+    private void jcbCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCalcularActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbCalcularActionPerformed
 
     /**
      * @param args the command line arguments
@@ -261,6 +285,7 @@ public class TelaCalculo extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JButton jcbAlterar;
     private javax.swing.JButton jcbCalcular;
     private javax.swing.JButton jcbSair;
     private javax.swing.JButton jcbSalvar;
