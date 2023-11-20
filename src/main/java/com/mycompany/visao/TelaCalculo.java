@@ -21,6 +21,14 @@ public class TelaCalculo extends javax.swing.JFrame {
         initComponents();
         
         BancoDeDadosMySql.conectar();
+        
+        DaoCalculo daoCalculo = new DaoCalculo();
+        int id = daoCalculo.buscarProximoId(); 
+        
+        if (id >= 0)
+            tfId.setText(String.valueOf(id));
+        
+        tfId.setEnabled(false);
     }
 
     /**
@@ -55,7 +63,7 @@ public class TelaCalculo extends javax.swing.JFrame {
         tableIndexador = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        tfDataBase = new javax.swing.JTextField();
         jcbAlterar = new javax.swing.JButton();
         addIndexador = new javax.swing.JButton();
         addValores = new javax.swing.JButton();
@@ -75,11 +83,29 @@ public class TelaCalculo extends javax.swing.JFrame {
 
         jLabel3.setText("NOME");
 
+        tfNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfNomeActionPerformed(evt);
+            }
+        });
+
         jLabel4.setText("TELEFONE");
 
         jLabel5.setText("NR.DO  CÁLCULO");
 
+        tfTelefone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfTelefoneActionPerformed(evt);
+            }
+        });
+
         jLabel6.setText("ANOTAÇÕES");
+
+        tfAnotacoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfAnotacoesActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("DATA BASE JUROS");
 
@@ -91,6 +117,11 @@ public class TelaCalculo extends javax.swing.JFrame {
         });
 
         jcbSalvar.setText("SALVAR");
+        jcbSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbSalvarActionPerformed(evt);
+            }
+        });
 
         jcbSair.setText("SAIR");
 
@@ -119,6 +150,12 @@ public class TelaCalculo extends javax.swing.JFrame {
         jTextField1.setText("idCliente");
 
         jLabel9.setText("INDEXADORES DE CÁLCULO");
+
+        tfDataBase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfDataBaseActionPerformed(evt);
+            }
+        });
 
         jcbAlterar.setText("Alterar");
 
@@ -180,7 +217,7 @@ public class TelaCalculo extends javax.swing.JFrame {
                                     .addComponent(jLabel5)))
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfDataBase, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -230,7 +267,7 @@ public class TelaCalculo extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tfDataBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel9))
                             .addComponent(addIndexador))
@@ -268,12 +305,16 @@ public class TelaCalculo extends javax.swing.JFrame {
             Double saldo = 0.0;
            
             String debCred = "";
-            for(int i = 0; i < qtdeLinhas; i++){
+            int contCalc = 0;
+            int seq = daoCalculo.buscarUltimoSeq();
+            Double saldoAnterior = 0.0;
+            for(int i = 1; i < qtdeLinhas; i++){
                 debCred = String.valueOf(defaultTableModel.getValueAt(i, 3));
+                contCalc = daoCalculo.contCalculo(Integer.parseInt(tfId.getText()));
                 
-                System.out.println(debCred);
+                System.out.println(contCalc);
                 
-                daoCalculo.inserir(i + 1, 
+                daoCalculo.inserir(seq + i, 
                 Integer.parseInt(tfId.getText()), 
                 1, 
                 1, 
@@ -285,12 +326,14 @@ public class TelaCalculo extends javax.swing.JFrame {
 //                Double.valueOf(String.valueOf(defaultTableModel.getValueAt(i, 9))), //Taxa de juro
 //                Integer.parseInt(String.valueOf(defaultTableModel.getValueAt(i, 10))), //Dias 
 //                Double.valueOf(String.valueOf(defaultTableModel.getValueAt(i, 11)))); //Valor do juro
-                0.0,
+                Double.valueOf(String.valueOf(defaultTableModel.getValueAt(i, 2))),
                 0.0,
                 0.0,
                 0,
                 0.0,
-                debCred);
+                debCred,
+                contCalc,
+                saldoAnterior);
             }
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -308,6 +351,26 @@ public class TelaCalculo extends javax.swing.JFrame {
         
         defaultTableModel.addRow(new Object[]{"", "", ""});
     }//GEN-LAST:event_addValoresActionPerformed
+
+    private void tfNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfNomeActionPerformed
+
+    private void tfAnotacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfAnotacoesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfAnotacoesActionPerformed
+
+    private void tfDataBaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfDataBaseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfDataBaseActionPerformed
+
+    private void tfTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfTelefoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfTelefoneActionPerformed
+
+    private void jcbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbSalvarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbSalvarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -359,7 +422,6 @@ public class TelaCalculo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JButton jcbAlterar;
     private javax.swing.JButton jcbCalcular;
     private javax.swing.JButton jcbSair;
@@ -368,6 +430,7 @@ public class TelaCalculo extends javax.swing.JFrame {
     private javax.swing.JTable tableValores;
     private javax.swing.JTextField tfAnotacoes;
     private javax.swing.JTextField tfCpfCnpj;
+    private javax.swing.JTextField tfDataBase;
     private javax.swing.JTextField tfId;
     private javax.swing.JTextField tfNome;
     private javax.swing.JTextField tfNrCalculo;

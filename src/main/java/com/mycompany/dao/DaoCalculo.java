@@ -14,7 +14,7 @@ public class DaoCalculo extends BancoDeDadosMySql{
     String sql;
     
     public  Boolean inserir(int seq, int id, int idCliente, int idIndice, String data, String historico, Double debito, Double credito, 
-                Double saldo, Double taxaJuro, int dias, Double valorJuro, String debCred){
+            Double saldo, Double taxaJuro, int dias, Double valorJuro, String debCred, int contCalc, Double saldoAnterior){
         try{
             sql =   "INSERT INTO CALCULO (SEQ, ID, ID_CLIENTE, ID_INDICE, DATA, HISTORICO, DEBITO, CREDITO, SALDO, TAXA_JURO, DIAS, VALOR_JURO) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -33,11 +33,20 @@ public class DaoCalculo extends BancoDeDadosMySql{
                 getStatement().setDouble(7, debito);
             }
             else{
-                getStatement().setDouble(7, credito);
-                getStatement().setDouble(8, 0.0);
+                getStatement().setDouble(8, credito);
+                getStatement().setDouble(7, 0.0);
             }
             
-            getStatement().setDouble(9, saldo);
+            if(contCalc == 0){
+                if(debCred.equals("D")){
+                    getStatement().setDouble(9, -debito);
+                }else{
+                    getStatement().setDouble(9, debito);
+                }
+            }else{
+                getStatement().setDouble(9, debito);
+            }
+                
             getStatement().setDouble(10, taxaJuro);
             getStatement().setInt(11, dias);
             getStatement().setDouble(12, valorJuro);
@@ -51,4 +60,65 @@ public class DaoCalculo extends BancoDeDadosMySql{
         }
     }
     
+    public int buscarProximoId(){
+        int id = 0;
+        
+        try{
+            sql = "SELECT IFNULL(MAX(ID), 0) + 1 FROM CALCULO";
+            
+            setStatement(getConexao().prepareStatement(sql));
+            
+            setResultado(getStatement().executeQuery());
+            
+            getResultado().next(); //Move para o primeiro registro.
+            
+            id = getResultado().getInt(1); //Pega o valor retornado na consulta
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+        return id;
+    }
+    
+    public int buscarUltimoSeq(){
+        int id = 0;
+        
+        try{
+            sql = "SELECT IFNULL(MAX(SEQ), 0) FROM CALCULO";
+            
+            setStatement(getConexao().prepareStatement(sql));
+            
+            setResultado(getStatement().executeQuery());
+            
+            getResultado().next(); //Move para o primeiro registro.
+            
+            id = getResultado().getInt(1); //Pega o valor retornado na consulta
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+        return id;
+    }
+    
+    public int contCalculo(int idCalculo){
+        int id = 0;
+        
+        try{
+            sql = "SELECT COUNT(ID) FROM CALCULO WHERE ID = ?";
+            
+            setStatement(getConexao().prepareStatement(sql));
+            
+            getStatement().setInt(1, idCalculo);
+            
+            setResultado(getStatement().executeQuery());
+            
+            getResultado().next(); //Move para o primeiro registro.
+            
+            id = getResultado().getInt(1); //Pega o valor retornado na consulta
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+        return id;
+    }
 }
